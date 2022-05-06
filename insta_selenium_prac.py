@@ -1,5 +1,6 @@
 import os
 
+import requests
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time, sys
@@ -13,8 +14,11 @@ browser.get("https://www.instagram.com/")
 browser.implicitly_wait(5)
 
 # login
-username = "user12_"        # enter your username/ use a fake account
-pw = "combatboots98"         # enter password
+username = "mal_ikre"
+pw = "Malik123"
+
+# username = "user12_"        # enter your username/ use a fake account
+# pw = "combatboots98"         # enter password
 
 loginUsernameElem = browser.find_element_by_xpath('''//*[@id="loginForm"]/div/div[1]/div/label/input''')
 passwordElem = browser.find_element_by_xpath('''//*[@id="loginForm"]/div/div[2]/div/label/input''')
@@ -27,7 +31,9 @@ loginBtn.click()
 
 # search profile
 searchProfile = browser.find_element_by_xpath('''//*[@id="react-root"]/section/nav/div[2]/div/div/div[2]/input''')
-searchProfile.send_keys("agameoftones")  # instagram account name to scrape (must be public account)
+searchAcc = "shraddha_bohora"     # instagram account name to scrape (must be public account)
+# sulav_baral_58 44 posts
+searchProfile.send_keys(searchAcc)
 searchProfile.submit
 
 topmostProfile = browser.find_element_by_xpath('''//*[@id="react-root"]/section/nav/div[2]/div/div/div[2]/div[3]/div/div[2]/div/div[1]/a''')
@@ -52,7 +58,7 @@ imgUrls = []
 try:
     # postsCountElem = browser.find_element_by_css_selector('span.g47SY')
     # postsCount = postsCountElem.text
-    postsCount = 44
+    postsCount = 46  # enter number of posts by the user
     rowCount = 0
     postNum = 0
 
@@ -61,11 +67,9 @@ try:
             htmlElem.send_keys(Keys.DOWN)
         for row in allPostsElem.find_elements_by_css_selector('div.Nnq7C'):     # div with all posts with class = 'Nnq7C' when the page loads once
             for post in row.find_elements_by_css_selector('div.v1Nh3'):         # individual post in a row with class v1Nh3
-                photoElem=post.find_element_by_css_selector("img.FFVAD")        # photo elem with class name FFVAD
+                photoElem = post.find_element_by_css_selector("img.FFVAD")        # photo elem with class name FFVAD
                 imgUrl = photoElem.get_attribute('src')
-                # print(imgUrl)
-                # postNum+=1
-                # print(f"post number: {postNum}")
+
                 if imgUrl not in imgUrls:
                     imgUrls.append(photoElem.get_attribute('src'))
         if len(imgUrls) == postsCount:
@@ -78,13 +82,19 @@ try:
     print("Total URLS fetched: " + str(len(imgUrls)))
 
 #     TODO download images
+    folderName = searchAcc + "-fetched"
+    os.makedirs(folderName)
 
-    os.makedirs("")
-    path = ""
-
+    path = Path(folderName)
     for i, imgUrl in enumerate(imgUrls):
-        file = open()
+        imgName = str(i) + ".jpeg"
+        file = open(path/Path(imgName), 'wb')
+        res = requests.get(imgUrl)
+        res.raise_for_status()
 
+        for chunk in res.iter_content(100000):
+            file.write(chunk)
+        file.close()
 
 
 except :
