@@ -14,11 +14,9 @@ browser.get("https://www.instagram.com/")
 browser.implicitly_wait(5)
 
 # login
-username = "mal_ikre"
-pw = "Malik123"
 
-# username = "user12_"        # enter your username/ use a fake account
-# pw = "combatboots98"         # enter password
+username = "user12_"        # enter your username/ use a fake account
+pw = "combatboots98"         # enter password
 
 loginUsernameElem = browser.find_element_by_xpath('''//*[@id="loginForm"]/div/div[1]/div/label/input''')
 passwordElem = browser.find_element_by_xpath('''//*[@id="loginForm"]/div/div[2]/div/label/input''')
